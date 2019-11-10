@@ -11,4 +11,5 @@ Podgląd rozgrywki na której moglibyśmy bazować. Podzieliłem go na 3 etapy:
 Na na miejscu zebranych kafelków wygenerują się nowe
  3. Prawy screenshot pokazuje koniec poziomu - czyli pomalowaną planszę
  
+ ![img](https://i.imgur.com/p11fZit.png)
  
