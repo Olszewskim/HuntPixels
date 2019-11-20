@@ -1,19 +1,35 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 using UnityEngine;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(Grid))]
 public class LevelGrid : MonoBehaviour {
-    [SerializeField] private TextAsset _levelData;
+    [SerializeField] private TextAsset[] _levelsData;
     [SerializeField] private Pixel _pixelPrefab;
     [SerializeField] private CameraController _cameraController;
+    [SerializeField] private Button _nextLevelButton;
     private Grid _levelGrid;
-    private List<Pixel> _levelPixels;
+    private List<Pixel> _levelPixels = new List<Pixel>();
+    private int _currentLevelIndex;
 
     private void Start() {
         _levelGrid = GetComponent<Grid>();
-        StartLevel(_levelData);
+        _nextLevelButton.onClick.AddListener(NextLevel);
+        StartLevel(_levelsData[_currentLevelIndex]);
     }
+
+    private void NextLevel() {
+        _currentLevelIndex++;
+        if (_currentLevelIndex == _levelsData.Length) {
+            _currentLevelIndex = 0;
+        }
+
+        ClearOldLevel();
+        StartLevel(_levelsData[_currentLevelIndex]);
+    }
+
+
 
     private void StartLevel(TextAsset levelData) {
         var dataJSON = JsonConvert.DeserializeObject<PixelImageJSON>(levelData.text);
@@ -34,9 +50,17 @@ public class LevelGrid : MonoBehaviour {
                 }
 
                 dataIndex++;
+                _levelPixels.Add(pixel);
             }
         }
 
         _cameraController.FitCameraToGrid(gridSize.x, transform);
+    }
+
+    private void ClearOldLevel() {
+        for (int i = 0; i < _levelPixels.Count; i++) {
+            Destroy(_levelPixels[i].gameObject);
+        }
+        _levelPixels.Clear();
     }
 }
