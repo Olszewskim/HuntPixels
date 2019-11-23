@@ -56,7 +56,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d719eb6e09b4e0ba4b948904bceb9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _levelData: {fileID: 4900000, guid: db8f27b2f8183441b88ad54839508e10, type: 3}
+  _levelsData:
+  - {fileID: 4900000, guid: db8f27b2f8183441b88ad54839508e10, type: 3}
+  - {fileID: 4900000, guid: 7f15d7a682dd545c0aa3b9fe754ada9f, type: 3}
   _pixelPrefab: {fileID: 2005537526303916219, guid: 2c84795f8edc54c10844729f6ddb0658,
     type: 3}
   _cameraController: {fileID: 0}
+  _nextLevelButton: {fileID: 0}

@@ -735,11 +735,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1555526397521077535, guid: bc521195288af459f820fad9553b90fa,
         type: 3}
-      propertyPath: _levelsData.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1555526397521077535, guid: bc521195288af459f820fad9553b90fa,
-        type: 3}
       propertyPath: _cameraController
       value: 
       objectReference: {fileID: 751862674}
@@ -753,16 +748,6 @@ PrefabInstance:
       propertyPath: _nextLevelButton
       value: 
       objectReference: {fileID: 1438355772}
-    - target: {fileID: 1555526397521077535, guid: bc521195288af459f820fad9553b90fa,
-        type: 3}
-      propertyPath: _levelsData.Array.data[0]
-      value: 
-      objectReference: {fileID: 4900000, guid: db8f27b2f8183441b88ad54839508e10, type: 3}
-    - target: {fileID: 1555526397521077535, guid: bc521195288af459f820fad9553b90fa,
-        type: 3}
-      propertyPath: _levelsData.Array.data[1]
-      value: 
-      objectReference: {fileID: 4900000, guid: b17d00da3a7064e0683dd4fc67032836, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bc521195288af459f820fad9553b90fa, type: 3}
 --- !u!1001 &2121458563358546218
