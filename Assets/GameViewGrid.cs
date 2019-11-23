@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [RequireComponent(typeof(Grid))]
@@ -9,7 +10,7 @@ public class GameViewGrid : MonoBehaviour {
     [SerializeField] private CameraController _cameraController;
 
     private Grid _grid;
-    private List<Pixel> _gamePixels = new List<Pixel>();
+    private readonly List<Pixel> _gamePixels = new List<Pixel>();
     private float _percentageGridPosFromTopEdge = 0.03f;
 
     private void Awake() {
@@ -38,7 +39,7 @@ public class GameViewGrid : MonoBehaviour {
         var camHeight = _cameraController.GetCameraHeight();
         _grid.transform.position = new Vector3(
             -gridWidth / 2,
-            -camHeight / 2  + _percentageGridPosFromTopEdge * camHeight,
+            -camHeight / 2 + _percentageGridPosFromTopEdge * camHeight,
             0
         );
     }
@@ -47,4 +48,10 @@ public class GameViewGrid : MonoBehaviour {
         return _gameViewWidth * _grid.cellSize.x + (_gameViewWidth - 1) * _grid.cellGap.x;
     }
 
+    public void InitLevel(HashSet<Color> levelColors) {
+        var colorsList = levelColors.ToList();
+        for (int i = 0; i < _gamePixels.Count; i++) {
+            _gamePixels[i].SetColor(colorsList.GetRandomElement());
+        }
+    }
 }

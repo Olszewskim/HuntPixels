@@ -9,12 +9,15 @@ public class LevelGrid : MonoBehaviour {
     [SerializeField] private Pixel _pixelPrefab;
     [SerializeField] private CameraController _cameraController;
     [SerializeField] private Button _nextLevelButton;
+    [SerializeField] private GameViewGrid _gameViewGrid;
+
     private Grid _levelGrid;
-    private List<Pixel> _levelPixels = new List<Pixel>();
+    private readonly List<Pixel> _levelPixels = new List<Pixel>();
     private int _currentLevelIndex;
     private float _cameraWidthCoverage = 0.7f;
     private float _gapPercentage = 0.05f;
     private float _percentageGridPosFromTopEdge = 0.03f;
+    private readonly  HashSet<Color> _levelColors = new HashSet<Color>();
 
     private void Start() {
         _levelGrid = GetComponent<Grid>();
@@ -33,6 +36,7 @@ public class LevelGrid : MonoBehaviour {
     }
 
     private void StartLevel(TextAsset levelData) {
+        _levelColors.Clear();
         var dataJSON = JsonConvert.DeserializeObject<PixelImageJSON>(levelData.text);
         var dataIndex = 0;
         CalculateGridSizes(dataJSON.width);
@@ -48,6 +52,7 @@ public class LevelGrid : MonoBehaviour {
                 Color newColor;
                 if (ColorUtility.TryParseHtmlString(dataJSON.colorData[dataIndex], out newColor)) {
                     pixel.SetColor(newColor);
+                    _levelColors.Add(newColor);
                 }
 
                 dataIndex++;
@@ -56,6 +61,7 @@ public class LevelGrid : MonoBehaviour {
         }
 
         PlaceGridAtTopOfScreen(dataJSON.width, dataJSON.height);
+        _gameViewGrid.InitLevel(_levelColors);
     }
 
     private void PlaceGridAtTopOfScreen(int dataWidth, int dataHeight) {
