@@ -12,6 +12,9 @@ public class LevelGrid : MonoBehaviour {
     private Grid _levelGrid;
     private List<Pixel> _levelPixels = new List<Pixel>();
     private int _currentLevelIndex;
+    private float _cameraWidthCoverage = 0.7f;
+    private float _gapPercentage = 0.05f;
+    private float _percentageGridPosFromTopEdge = 0.03f;
 
     private void Start() {
         _levelGrid = GetComponent<Grid>();
@@ -29,21 +32,19 @@ public class LevelGrid : MonoBehaviour {
         StartLevel(_levelsData[_currentLevelIndex]);
     }
 
-
-
     private void StartLevel(TextAsset levelData) {
         var dataJSON = JsonConvert.DeserializeObject<PixelImageJSON>(levelData.text);
         var dataIndex = 0;
-        var gridSize =
-            new Vector3(dataJSON.width * _levelGrid.cellSize.x + (dataJSON.width - 1) * _levelGrid.cellGap.x,
-                dataJSON.height * _levelGrid.cellSize.y + (dataJSON.height - 1) * _levelGrid.cellGap.y);
+        CalculateGridSizes(dataJSON.width);
+
         for (int y = 0; y < dataJSON.height; y++) {
             for (int x = 0; x < dataJSON.width; x++) {
                 var xPos = x * (_levelGrid.cellSize.x + _levelGrid.cellGap.x);
                 var yPos = y * (_levelGrid.cellSize.y + _levelGrid.cellGap.y);
-                var localPos = new Vector3(xPos, yPos, 0) - gridSize / 2 + _levelGrid.cellSize / 2;
+                var localPos = new Vector3(xPos, yPos, 0) + _levelGrid.cellSize / 2;
                 var pixel = Instantiate(_pixelPrefab, transform);
                 pixel.transform.localPosition = localPos;
+                pixel.transform.localScale = _levelGrid.cellSize;
                 Color newColor;
                 if (ColorUtility.TryParseHtmlString(dataJSON.colorData[dataIndex], out newColor)) {
                     pixel.SetColor(newColor);
@@ -54,13 +55,34 @@ public class LevelGrid : MonoBehaviour {
             }
         }
 
-        _cameraController.FitCameraToGrid(gridSize.x, transform);
+        PlaceGridAtTopScreen(dataJSON.width, dataJSON.height);
+    }
+
+    private void PlaceGridAtTopScreen(int dataWidth, int dataHeight) {
+        var gridWidth = dataWidth * _levelGrid.cellSize.x + (dataWidth - 1) * _levelGrid.cellGap.x;
+        var gridHeight = dataHeight * _levelGrid.cellSize.y + (dataHeight - 1) * _levelGrid.cellGap.y;
+        var camHeight = _cameraController.GetCameraHeight();
+        _levelGrid.transform.position = new Vector3(
+            -gridWidth / 2,
+            camHeight / 2 - gridHeight - _percentageGridPosFromTopEdge * camHeight,
+            0
+        );
+    }
+
+    private void CalculateGridSizes(float pictureElements) {
+        var camWidth = _cameraController.GetCameraWidth() * _cameraWidthCoverage;
+        var widthPerElement = camWidth / pictureElements;
+        var gapWidth = widthPerElement * _gapPercentage;
+        widthPerElement -= gapWidth;
+        _levelGrid.cellSize = new Vector3(widthPerElement, widthPerElement, widthPerElement);
+        _levelGrid.cellGap = new Vector3(gapWidth, gapWidth, gapWidth);
     }
 
     private void ClearOldLevel() {
         for (int i = 0; i < _levelPixels.Count; i++) {
             Destroy(_levelPixels[i].gameObject);
         }
+
         _levelPixels.Clear();
     }
 }
