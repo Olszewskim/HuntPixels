@@ -55,10 +55,10 @@ public class LevelGrid : MonoBehaviour {
             }
         }
 
-        PlaceGridAtTopScreen(dataJSON.width, dataJSON.height);
+        PlaceGridAtTopOfScreen(dataJSON.width, dataJSON.height);
     }
 
-    private void PlaceGridAtTopScreen(int dataWidth, int dataHeight) {
+    private void PlaceGridAtTopOfScreen(int dataWidth, int dataHeight) {
         var gridWidth = dataWidth * _levelGrid.cellSize.x + (dataWidth - 1) * _levelGrid.cellGap.x;
         var gridHeight = dataHeight * _levelGrid.cellSize.y + (dataHeight - 1) * _levelGrid.cellGap.y;
         var camHeight = _cameraController.GetCameraHeight();

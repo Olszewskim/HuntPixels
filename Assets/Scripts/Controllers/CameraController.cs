@@ -2,6 +2,7 @@
 
 [RequireComponent(typeof(Camera))]
 public class CameraController : MonoBehaviour {
+    [SerializeField] private float _percentageOfMargin = 0.15f;
     private Camera _cam;
 
     private void Awake() {
@@ -14,5 +15,15 @@ public class CameraController : MonoBehaviour {
 
     public float GetCameraHeight() {
         return 2f * _cam.orthographicSize;
+    }
+
+    public void FitCameraSizeToGridWith(float gridWidth) {
+        if (_cam == null) {
+            _cam = GetComponent<Camera>();
+        }
+
+        var desiredScreenWidth = (1 + _percentageOfMargin) * gridWidth;
+        var height = desiredScreenWidth / _cam.aspect;
+        _cam.orthographicSize = height / 2;
     }
 }
