@@ -1,3 +1,4 @@
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 /// <summary>
@@ -7,7 +8,7 @@ using UnityEngine;
 ///
 /// As a note, this is made as MonoBehaviour because we need Coroutines.
 /// </summary>
-public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour {
+public abstract class Singleton<T> : SerializedMonoBehaviour where T : SerializedMonoBehaviour {
     private static T _instance;
 
     private static object _lock = new object();
