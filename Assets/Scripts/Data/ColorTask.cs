@@ -2,11 +2,13 @@
 using UnityEngine;
 
 public class ColorTask {
-    [ShowInInspector] public Color ColorToCollect { get; }
-    [ShowInInspector] public int RequiredAmount { get; }
-    public bool IsCompleted => _currentCollected >= RequiredAmount;
+    [ShowInInspector] [PropertyOrder(0)] public Color ColorToCollect { get; }
 
-    [ShowInInspector]  private int _currentCollected;
+    [ShowInInspector] [PropertyOrder(2)] public int RequiredAmount { get; }
+
+    [ShowInInspector] [PropertyOrder(3)] public bool IsCompleted => _currentCollected >= RequiredAmount;
+
+    [ShowInInspector] [PropertyOrder(1)] private int _currentCollected;
 
     public ColorTask(Color colorToCollect, int requiredAmount) {
         ColorToCollect = colorToCollect;

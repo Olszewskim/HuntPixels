@@ -6,7 +6,7 @@ using UnityEngine;
 public class LevelData {
     [ShowInInspector] public Vector2Int ImageDimensions { get; }
     [ShowInInspector] public Color[,] ImageColorsData { get; }
-    [ShowInInspector] public List<ColorTask> LevelColorsTasks { get; } = new List<ColorTask>();
+    [TableList, ShowInInspector] public List<ColorTask> LevelColorsTasks { get; } = new List<ColorTask>();
 
     public LevelData(PixelImageJSON levelImageData) {
         ImageDimensions = new Vector2Int(levelImageData.width, levelImageData.height);
