@@ -7,12 +7,13 @@ public class LevelGrid : SerializedMonoBehaviour {
     [SerializeField] private Pixel _pixelPrefab;
     [SerializeField] private CameraController _cameraController;
     [SerializeField] private GameViewGrid _gameViewGrid;
+    [SerializeField] private ColorTasksBarUI _colorTasksBarUI;
 
     private Grid _levelGrid;
     [ShowInInspector] [ReadOnly] private LevelData _currentLevel;
     private readonly List<Pixel> _levelPixels = new List<Pixel>();
 
-    private float _cameraWidthCoverage = 0.7f;
+    private float _cameraWidthCoverage = 0.6f;
     private float _gapPercentage = 0.05f;
     private float _percentageGridPosFromTopEdge = 0.03f;
 
@@ -41,6 +42,7 @@ public class LevelGrid : SerializedMonoBehaviour {
 
         PlaceGridAtTopOfScreen(_currentLevel.ImageDimensions.x, _currentLevel.ImageDimensions.y);
         _gameViewGrid.InitLevel(_currentLevel.LevelColorsTasks);
+        _colorTasksBarUI.Init(_currentLevel.LevelColorsTasks);
     }
 
     private void PlaceGridAtTopOfScreen(int dataWidth, int dataHeight) {
