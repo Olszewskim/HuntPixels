@@ -1,48 +1,34 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 using UnityEngine;
-using UnityEngine.UI;
 
 [RequireComponent(typeof(Grid))]
 public class LevelGrid : MonoBehaviour {
-    [SerializeField] private TextAsset[] _levelsData;
     [SerializeField] private Pixel _pixelPrefab;
     [SerializeField] private CameraController _cameraController;
-    [SerializeField] private Button _nextLevelButton;
     [SerializeField] private GameViewGrid _gameViewGrid;
 
     private Grid _levelGrid;
+    private PixelImageJSON _currentLevel;
     private readonly List<Pixel> _levelPixels = new List<Pixel>();
-    private int _currentLevelIndex;
+
     private float _cameraWidthCoverage = 0.7f;
     private float _gapPercentage = 0.05f;
     private float _percentageGridPosFromTopEdge = 0.03f;
-    private readonly  HashSet<Color> _levelColors = new HashSet<Color>();
+    private readonly HashSet<Color> _levelColors = new HashSet<Color>();
 
-    private void Start() {
+    private void Awake() {
         _levelGrid = GetComponent<Grid>();
-        _nextLevelButton.onClick.AddListener(NextLevel);
-        StartLevel(_levelsData[_currentLevelIndex]);
     }
 
-    private void NextLevel() {
-        _currentLevelIndex++;
-        if (_currentLevelIndex == _levelsData.Length) {
-            _currentLevelIndex = 0;
-        }
-
+    public void StartLevel(TextAsset levelData) {
         ClearOldLevel();
-        StartLevel(_levelsData[_currentLevelIndex]);
-    }
-
-    private void StartLevel(TextAsset levelData) {
-        _levelColors.Clear();
-        var dataJSON = JsonConvert.DeserializeObject<PixelImageJSON>(levelData.text);
+        _currentLevel = JsonConvert.DeserializeObject<PixelImageJSON>(levelData.text);
         var dataIndex = 0;
-        CalculateGridSizes(dataJSON.width);
+        CalculateGridSizes(_currentLevel.width);
 
-        for (int y = 0; y < dataJSON.height; y++) {
-            for (int x = 0; x < dataJSON.width; x++) {
+        for (int y = 0; y < _currentLevel.height; y++) {
+            for (int x = 0; x < _currentLevel.width; x++) {
                 var xPos = x * (_levelGrid.cellSize.x + _levelGrid.cellGap.x);
                 var yPos = y * (_levelGrid.cellSize.y + _levelGrid.cellGap.y);
                 var localPos = new Vector3(xPos, yPos, 0) + _levelGrid.cellSize / 2;
@@ -50,7 +36,7 @@ public class LevelGrid : MonoBehaviour {
                 pixel.transform.localPosition = localPos;
                 pixel.transform.localScale = _levelGrid.cellSize;
                 Color newColor;
-                if (ColorUtility.TryParseHtmlString(dataJSON.colorData[dataIndex], out newColor)) {
+                if (ColorUtility.TryParseHtmlString(_currentLevel.colorData[dataIndex], out newColor)) {
                     pixel.SetColor(newColor);
                     _levelColors.Add(newColor);
                 }
@@ -60,7 +46,7 @@ public class LevelGrid : MonoBehaviour {
             }
         }
 
-        PlaceGridAtTopOfScreen(dataJSON.width, dataJSON.height);
+        PlaceGridAtTopOfScreen(_currentLevel.width, _currentLevel.height);
         _gameViewGrid.InitLevel(_levelColors);
     }
 
@@ -85,10 +71,12 @@ public class LevelGrid : MonoBehaviour {
     }
 
     private void ClearOldLevel() {
-        for (int i = 0; i < _levelPixels.Count; i++) {
+        for (var i = 0; i < _levelPixels.Count; i++) {
             Destroy(_levelPixels[i].gameObject);
         }
 
         _levelPixels.Clear();
+        _levelColors.Clear();
+        _currentLevel = null;
     }
 }
