@@ -35,7 +35,7 @@ public class LevelGrid : SerializedMonoBehaviour {
                 var pixel = Instantiate(_pixelPrefab, transform);
                 pixel.transform.localPosition = localPos;
                 pixel.transform.localScale = _levelGrid.cellSize;
-                pixel.SetColor(_currentLevel.ImageColorsData[x, y]);
+                pixel.SetColor(_currentLevel.ImageColorsData[x, y], true);
                 _levelPixels.Add(pixel);
             }
         }
