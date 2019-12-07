@@ -73,4 +73,10 @@ public class LevelGrid : SerializedMonoBehaviour {
         _levelPixels.Clear();
         _currentLevel = null;
     }
+
+    public void SwitchImageColors() {
+        for (int i = 0; i < _levelPixels.Count; i++) {
+            _levelPixels[i].SwitchColor();
+        }
+    }
 }

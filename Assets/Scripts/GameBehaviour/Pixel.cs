@@ -5,6 +5,7 @@ using UnityEngine;
 public class Pixel : MonoBehaviour {
     private SpriteRenderer _spriteRenderer;
     private Color _myColor;
+    private bool _isGray;
     private readonly static float _showColorAnimTime = 0.5f;
 
     private void Awake() {
@@ -20,15 +21,25 @@ public class Pixel : MonoBehaviour {
         }
     }
 
-    public void GrayOut() {
+    private void GrayOut() {
         GrayOut(_showColorAnimTime);
     }
 
     private void GrayOut(float time) {
         _spriteRenderer.DOColor(Constants.GRAY_COLOR, time);
+        _isGray = true;
     }
 
-    public void ShowColor() {
+    private void ShowColor() {
         _spriteRenderer.DOColor(_myColor, _showColorAnimTime);
+        _isGray = false;
+    }
+
+    public void SwitchColor() {
+        if (_isGray) {
+            ShowColor();
+        } else {
+            GrayOut();
+        }
     }
 }
