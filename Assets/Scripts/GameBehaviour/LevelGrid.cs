@@ -1,53 +1,46 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 [RequireComponent(typeof(Grid))]
-public class LevelGrid : MonoBehaviour {
+public class LevelGrid : SerializedMonoBehaviour {
     [SerializeField] private Pixel _pixelPrefab;
     [SerializeField] private CameraController _cameraController;
     [SerializeField] private GameViewGrid _gameViewGrid;
 
     private Grid _levelGrid;
-    private PixelImageJSON _currentLevel;
+    [ShowInInspector] [ReadOnly] private LevelData _currentLevel;
     private readonly List<Pixel> _levelPixels = new List<Pixel>();
 
     private float _cameraWidthCoverage = 0.7f;
     private float _gapPercentage = 0.05f;
     private float _percentageGridPosFromTopEdge = 0.03f;
-    private readonly HashSet<Color> _levelColors = new HashSet<Color>();
 
     private void Awake() {
         _levelGrid = GetComponent<Grid>();
     }
 
-    public void StartLevel(TextAsset levelData) {
+    public void StartLevel(LevelData levelData) {
         ClearOldLevel();
-        _currentLevel = JsonConvert.DeserializeObject<PixelImageJSON>(levelData.text);
-        var dataIndex = 0;
-        CalculateGridSizes(_currentLevel.width);
+        _currentLevel = levelData;
+        CalculateGridSizes(_currentLevel.ImageDimensions.x);
 
-        for (int y = 0; y < _currentLevel.height; y++) {
-            for (int x = 0; x < _currentLevel.width; x++) {
+        for (int y = 0; y < _currentLevel.ImageDimensions.y; y++) {
+            for (int x = 0; x < _currentLevel.ImageDimensions.x; x++) {
                 var xPos = x * (_levelGrid.cellSize.x + _levelGrid.cellGap.x);
                 var yPos = y * (_levelGrid.cellSize.y + _levelGrid.cellGap.y);
                 var localPos = new Vector3(xPos, yPos, 0) + _levelGrid.cellSize / 2;
+
                 var pixel = Instantiate(_pixelPrefab, transform);
                 pixel.transform.localPosition = localPos;
                 pixel.transform.localScale = _levelGrid.cellSize;
-                Color newColor;
-                if (ColorUtility.TryParseHtmlString(_currentLevel.colorData[dataIndex], out newColor)) {
-                    pixel.SetColor(newColor);
-                    _levelColors.Add(newColor);
-                }
-
-                dataIndex++;
+                pixel.SetColor(_currentLevel.ImageColorsData[x, y]);
                 _levelPixels.Add(pixel);
             }
         }
 
-        PlaceGridAtTopOfScreen(_currentLevel.width, _currentLevel.height);
-        _gameViewGrid.InitLevel(_levelColors);
+        PlaceGridAtTopOfScreen(_currentLevel.ImageDimensions.x, _currentLevel.ImageDimensions.y);
+        _gameViewGrid.InitLevel(_currentLevel.LevelColors);
     }
 
     private void PlaceGridAtTopOfScreen(int dataWidth, int dataHeight) {
@@ -76,7 +69,6 @@ public class LevelGrid : MonoBehaviour {
         }
 
         _levelPixels.Clear();
-        _levelColors.Clear();
         _currentLevel = null;
     }
 }

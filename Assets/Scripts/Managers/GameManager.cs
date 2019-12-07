@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Newtonsoft.Json;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class GameManager : Singleton<GameManager> {
@@ -10,7 +11,7 @@ public class GameManager : Singleton<GameManager> {
 
     private void Start() {
         _nextLevelButton.onClick.AddListener(NextLevel);
-        _levelGrid.StartLevel(_levelsData[_currentLevelIndex]);
+        StartCurrentLevel();
     }
 
     private void NextLevel() {
@@ -19,6 +20,12 @@ public class GameManager : Singleton<GameManager> {
             _currentLevelIndex = 0;
         }
 
-        _levelGrid.StartLevel(_levelsData[_currentLevelIndex]);
+        StartCurrentLevel();
+    }
+
+    private void StartCurrentLevel() {
+        var imageJSON = JsonConvert.DeserializeObject<PixelImageJSON>(_levelsData[_currentLevelIndex].text);
+        var levelData = new LevelData(imageJSON);
+        _levelGrid.StartLevel(levelData);
     }
 }
