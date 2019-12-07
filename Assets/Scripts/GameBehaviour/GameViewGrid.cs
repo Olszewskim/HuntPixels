@@ -48,10 +48,9 @@ public class GameViewGrid : MonoBehaviour {
         return _gameViewWidth * _grid.cellSize.x + (_gameViewWidth - 1) * _grid.cellGap.x;
     }
 
-    public void InitLevel(HashSet<Color> levelColors) {
-        var colorsList = levelColors.ToList();
+    public void InitLevel(List<ColorTask> levelColorsTasks) {
         for (int i = 0; i < _gamePixels.Count; i++) {
-            _gamePixels[i].SetColor(colorsList.GetRandomElement());
+            _gamePixels[i].SetColor(levelColorsTasks.GetRandomElement().ColorToCollect);
         }
     }
 }

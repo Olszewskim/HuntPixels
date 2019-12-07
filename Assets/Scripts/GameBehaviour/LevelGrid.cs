@@ -40,7 +40,7 @@ public class LevelGrid : SerializedMonoBehaviour {
         }
 
         PlaceGridAtTopOfScreen(_currentLevel.ImageDimensions.x, _currentLevel.ImageDimensions.y);
-        _gameViewGrid.InitLevel(_currentLevel.LevelColors);
+        _gameViewGrid.InitLevel(_currentLevel.LevelColorsTasks);
     }
 
     private void PlaceGridAtTopOfScreen(int dataWidth, int dataHeight) {

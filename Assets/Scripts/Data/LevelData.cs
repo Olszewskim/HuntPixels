@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
 public class LevelData {
     [ShowInInspector] public Vector2Int ImageDimensions { get; }
     [ShowInInspector] public Color[,] ImageColorsData { get; }
-    [ShowInInspector] public HashSet<Color> LevelColors { get; } = new HashSet<Color>();
+    [ShowInInspector] public List<ColorTask> LevelColorsTasks { get; } = new List<ColorTask>();
 
     public LevelData(PixelImageJSON levelImageData) {
         ImageDimensions = new Vector2Int(levelImageData.width, levelImageData.height);
@@ -17,11 +18,20 @@ public class LevelData {
                 Color newColor;
                 if (ColorUtility.TryParseHtmlString(levelImageData.colorData[dataIndex], out newColor)) {
                     ImageColorsData[x, y] = newColor;
-                    LevelColors.Add(newColor);
                 }
 
                 dataIndex++;
             }
+        }
+
+        CreateColorTasks();
+    }
+
+    private void CreateColorTasks() {
+        var colorsToCollect =
+            ImageColorsData.Cast<Color>().GroupBy(c => c).ToDictionary(cd => cd.Key, cd => cd.Count());
+        foreach (var task in colorsToCollect) {
+            LevelColorsTasks.Add(new ColorTask(task.Key, task.Value));
         }
     }
 }
