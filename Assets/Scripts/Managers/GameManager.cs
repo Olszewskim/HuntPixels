@@ -7,6 +7,11 @@ public class GameManager : Singleton<GameManager> {
 
     private int _currentLevelIndex;
 
+    protected override void Awake() {
+        base.Awake();
+        Application.targetFrameRate = 60;
+    }
+
     private void Start() {
         StartCurrentLevel();
     }
