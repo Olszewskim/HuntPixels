@@ -5,7 +5,7 @@ public abstract class Pixel : MonoBehaviour {
     protected SpriteRenderer spriteRenderer;
     protected Color myColor;
 
-    private void Awake() {
+    protected virtual void Awake() {
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
