@@ -4,14 +4,14 @@ using UnityEngine;
 
 [RequireComponent(typeof(Grid))]
 public class LevelGrid : SerializedMonoBehaviour {
-    [SerializeField] private Pixel _pixelPrefab;
+    [SerializeField] private ImagePixel imagePixelPrefab;
     [SerializeField] private CameraController _cameraController;
     [SerializeField] private GameViewGrid _gameViewGrid;
     [SerializeField] private ColorTasksBarUI _colorTasksBarUI;
 
     private Grid _levelGrid;
     [ShowInInspector] [ReadOnly] private LevelData _currentLevel;
-    private readonly List<Pixel> _levelPixels = new List<Pixel>();
+    private readonly List<ImagePixel> _levelPixels = new List<ImagePixel>();
 
     private float _cameraWidthCoverage = 0.6f;
     private float _gapPercentage = 0.05f;
@@ -32,10 +32,10 @@ public class LevelGrid : SerializedMonoBehaviour {
                 var yPos = y * (_levelGrid.cellSize.y + _levelGrid.cellGap.y);
                 var localPos = new Vector3(xPos, yPos, 0) + _levelGrid.cellSize / 2;
 
-                var pixel = Instantiate(_pixelPrefab, transform);
+                var pixel = Instantiate(imagePixelPrefab, transform);
                 pixel.transform.localPosition = localPos;
                 pixel.transform.localScale = _levelGrid.cellSize;
-                pixel.SetColor(_currentLevel.ImageColorsData[x, y], true);
+                pixel.SetColor(_currentLevel.ImageColorsData[x, y]);
                 _levelPixels.Add(pixel);
             }
         }

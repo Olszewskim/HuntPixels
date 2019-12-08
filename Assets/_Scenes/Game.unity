@@ -164,7 +164,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _gameViewWidth: 10
   _gameViewHeight: 8
-  _pixelPrefab: {fileID: 2005537526303916219, guid: 2c84795f8edc54c10844729f6ddb0658,
+  _gamePixelPrefab: {fileID: 1928455877650403812, guid: 353bda43aa4214709a1edf9adae8a2e6,
     type: 3}
   _cameraController: {fileID: 751862674}
 --- !u!156049354 &757576540
@@ -923,6 +923,12 @@ PrefabInstance:
       propertyPath: _colorTasksBarUI
       value: 
       objectReference: {fileID: 779493252898545878}
+    - target: {fileID: 1555526397521077535, guid: bc521195288af459f820fad9553b90fa,
+        type: 3}
+      propertyPath: imagePixelPrefab
+      value: 
+      objectReference: {fileID: 2005537526303916219, guid: 2c84795f8edc54c10844729f6ddb0658,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bc521195288af459f820fad9553b90fa, type: 3}
 --- !u!114 &1555526396764073744 stripped
