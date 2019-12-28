@@ -26,4 +26,10 @@ public class CameraController : MonoBehaviour {
         var height = desiredScreenWidth / _cam.aspect;
         _cam.orthographicSize = height / 2;
     }
+
+    public Vector3 GetMouseWorldPosition() {
+        var pos = _cam.ScreenToWorldPoint(Input.mousePosition);
+        pos.z = 0;
+        return pos;
+    }
 }

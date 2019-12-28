@@ -40,6 +40,14 @@ namespace UnityConstants
         /// ID of sorting layer 'Default'.
         /// </summary>
         public const int Default = 0;
+        /// <summary>
+        /// ID of sorting layer 'Pixel'.
+        /// </summary>
+        public const int Pixel = 1419311457;
+        /// <summary>
+        /// ID of sorting layer 'Selection'.
+        /// </summary>
+        public const int Selection = -807740087;
     }
 
     public static class Layers

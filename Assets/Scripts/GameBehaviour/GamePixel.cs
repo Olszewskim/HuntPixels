@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class GamePixel : Pixel, IPointerEnterHandler {
+public class GamePixel : Pixel, IPointerEnterHandler, IPointerDownHandler {
     public static event Action<GamePixel> OnGamePixelCanBeSelected;
     public static event Action<GamePixel> OnGamePixelCanBeUnselected;
 
@@ -28,13 +28,17 @@ public class GamePixel : Pixel, IPointerEnterHandler {
     }
 
     public void SelectPixel() {
-        _isSelected = true;
-        RefreshSelection();
+        if (!_isSelected) {
+            _isSelected = true;
+            RefreshSelection();
+        }
     }
 
     public void UnselectPixel() {
-        _isSelected = false;
-        RefreshSelection();
+        if (_isSelected) {
+            _isSelected = false;
+            RefreshSelection();
+        }
     }
 
     public Vector3Int GetPixelCoords() {
@@ -42,12 +46,18 @@ public class GamePixel : Pixel, IPointerEnterHandler {
     }
 
     public void OnPointerEnter(PointerEventData eventData) {
+        TryChangePixelState();
+    }
+
+    public void OnPointerDown(PointerEventData eventData) {
+        TryChangePixelState();
+    }
+
+    private void TryChangePixelState() {
         if (!_isSelected) {
             OnGamePixelCanBeSelected?.Invoke(this);
         } else {
             OnGamePixelCanBeUnselected?.Invoke(this);
         }
     }
-
-
 }

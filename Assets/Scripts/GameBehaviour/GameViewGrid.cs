@@ -24,6 +24,7 @@ public class GameViewGrid : MonoBehaviour {
                 var xPos = x * (_grid.cellSize.x + _grid.cellGap.x);
                 var yPos = y * (_grid.cellSize.y + _grid.cellGap.y);
                 var localPos = new Vector3(xPos, yPos, 0) + _grid.cellSize / 2;
+                localPos.z = 0;
                 var pixel = Instantiate(_gamePixelPrefab, transform);
                 pixel.transform.localPosition = localPos;
                 _gamePixels.Add(pixel);

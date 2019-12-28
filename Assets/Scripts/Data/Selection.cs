@@ -10,20 +10,23 @@ public class Selection {
         gamePixel.SelectPixel();
     }
 
-    public void TryAddToSelection(GamePixel gamePixel) {
+    public bool TryAddToSelection(GamePixel gamePixel) {
         var lastPixel = GetLastPixel();
         if (lastPixel == null) {
             SelectPixel(gamePixel);
-            return;
+            return true;
         }
 
         if (lastPixel.myColor != gamePixel.myColor) {
-            return;
+            return false;
         }
 
         if (ArePixelsNeighbours(lastPixel.GetPixelCoords(), gamePixel.GetPixelCoords())) {
             SelectPixel(gamePixel);
+            return true;
         }
+
+        return false;
     }
 
     private void SelectPixel(GamePixel gamePixel) {
@@ -42,16 +45,16 @@ public class Selection {
                gamePixelCoords.x == lastPixelCoords.x - 1 && gamePixelCoords.y == lastPixelCoords.y - 1; //LB
     }
 
-
-
-    public void TryRemoveFromSelection(GamePixel gamePixel) {
+    public bool TryRemoveFromSelection(GamePixel gamePixel) {
         var preLastPixel = GetPreLastPixel();
         if (preLastPixel == gamePixel) {
             var lastPixel = GetLastPixel();
             SelectedPixels.Remove(lastPixel);
             lastPixel.UnselectPixel();
+            return true;
         }
 
+        return false;
     }
 
     private GamePixel GetLastPixel() {
@@ -64,5 +67,11 @@ public class Selection {
         }
 
         return SelectedPixels[SelectedPixels.Count - 2];
+    }
+
+    public void TryCollectSelection() {
+        for (int i = 0; i < SelectedPixels.Count; i++) {
+            SelectedPixels[i].UnselectPixel();
+        }
     }
 }

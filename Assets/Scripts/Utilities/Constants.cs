@@ -6,4 +6,6 @@ public static class Constants {
     public static readonly Color GRAY_COLOR = Color.gray;
 
     #endregion
+
+    public static readonly Vector3 VectorForward = Vector3.forward;
 }
