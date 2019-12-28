@@ -42,16 +42,27 @@ public class Selection {
                gamePixelCoords.x == lastPixelCoords.x - 1 && gamePixelCoords.y == lastPixelCoords.y - 1; //LB
     }
 
+
+
+    public void TryRemoveFromSelection(GamePixel gamePixel) {
+        var preLastPixel = GetPreLastPixel();
+        if (preLastPixel == gamePixel) {
+            var lastPixel = GetLastPixel();
+            SelectedPixels.Remove(lastPixel);
+            lastPixel.UnselectPixel();
+        }
+
+    }
+
     private GamePixel GetLastPixel() {
         return SelectedPixels.LastOrDefault();
     }
 
-    public void TryRemoveFromSelection(GamePixel gamePixel) {
-        var lastPixel = GetLastPixel();
-        if (lastPixel == gamePixel) {
-            SelectedPixels.Remove(gamePixel);
-            gamePixel.UnselectPixel();
+    private GamePixel GetPreLastPixel() {
+        if (SelectedPixels.Count < 2) {
+            return null;
         }
 
+        return SelectedPixels[SelectedPixels.Count - 2];
     }
 }
