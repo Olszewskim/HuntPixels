@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class ImagePixel : Pixel {
     private bool _isGray;
-    private readonly static float _showColorAnimTime = 0.5f;
+    private static readonly float _showColorAnimTime = 0.5f;
 
     public override void SetColor(Color color) {
         base.SetColor(color);

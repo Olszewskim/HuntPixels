@@ -5,6 +5,8 @@ public class GameManager : Singleton<GameManager> {
     [SerializeField] private TextAsset[] _levelsData;
     [SerializeField] private LevelGrid _levelGrid;
 
+
+    private SelectionManager _selectionManager;
     private int _currentLevelIndex;
 
     protected override void Awake() {
@@ -29,6 +31,7 @@ public class GameManager : Singleton<GameManager> {
         var imageJSON = JsonConvert.DeserializeObject<PixelImageJSON>(_levelsData[_currentLevelIndex].text);
         var levelData = new LevelData(imageJSON);
         _levelGrid.StartLevel(levelData);
+        _selectionManager = new SelectionManager();
     }
 
     public void SwitchImageColors() {

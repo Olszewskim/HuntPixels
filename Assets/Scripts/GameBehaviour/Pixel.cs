@@ -3,7 +3,7 @@
 [RequireComponent(typeof(SpriteRenderer))]
 public abstract class Pixel : MonoBehaviour {
     protected SpriteRenderer spriteRenderer;
-    protected Color myColor;
+    public Color myColor { get; protected set; }
 
     protected virtual void Awake() {
         spriteRenderer = GetComponent<SpriteRenderer>();

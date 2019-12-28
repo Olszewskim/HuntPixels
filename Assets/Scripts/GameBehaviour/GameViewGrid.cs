@@ -49,7 +49,7 @@ public class GameViewGrid : MonoBehaviour {
 
     public void InitLevel(List<ColorTask> levelColorsTasks) {
         for (int i = 0; i < _gamePixels.Count; i++) {
-            _gamePixels[i].SetColor(levelColorsTasks.GetRandomElement().ColorToCollect);
+            _gamePixels[i].SetColor(levelColorsTasks.GetRandomElement().ColorToCollect, _grid);
         }
     }
 }
