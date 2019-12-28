@@ -1,7 +1,10 @@
 ﻿public class SelectionManager {
     public SelectionManager() {
-        GamePixel.OnGamePixelCanSelected += TryAddToSelection;
+        GamePixel.OnGamePixelCanBeSelected += TryAddToSelection;
+        GamePixel.OnGamePixelCanBeUnselected += TryRemoveFromSelection;
     }
+
+
 
     private Selection _currentSelection;
 
@@ -12,5 +15,9 @@
         }
 
         _currentSelection.TryAddToSelection(gamePixel);
+    }
+
+    private void TryRemoveFromSelection(GamePixel gamePixel) {
+        _currentSelection?.TryRemoveFromSelection(gamePixel);
     }
 }

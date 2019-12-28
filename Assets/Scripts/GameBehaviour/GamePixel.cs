@@ -3,7 +3,9 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class GamePixel : Pixel, IPointerClickHandler {
-    public static event Action<GamePixel> OnGamePixelCanSelected;
+    public static event Action<GamePixel> OnGamePixelCanBeSelected;
+    public static event Action<GamePixel> OnGamePixelCanBeUnselected;
+
     [SerializeField] private GameObject _selection;
 
     private bool _isSelected;
@@ -27,12 +29,19 @@ public class GamePixel : Pixel, IPointerClickHandler {
 
     public void OnPointerClick(PointerEventData eventData) {
         if (!_isSelected) {
-            OnGamePixelCanSelected?.Invoke(this);
+            OnGamePixelCanBeSelected?.Invoke(this);
+        } else {
+            OnGamePixelCanBeUnselected?.Invoke(this);
         }
     }
 
     public void SelectPixel() {
         _isSelected = true;
+        RefreshSelection();
+    }
+
+    public void UnselectPixel() {
+        _isSelected = false;
         RefreshSelection();
     }
 

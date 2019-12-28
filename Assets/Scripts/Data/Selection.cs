@@ -45,4 +45,13 @@ public class Selection {
     private GamePixel GetLastPixel() {
         return SelectedPixels.LastOrDefault();
     }
+
+    public void TryRemoveFromSelection(GamePixel gamePixel) {
+        var lastPixel = GetLastPixel();
+        if (lastPixel == gamePixel) {
+            SelectedPixels.Remove(gamePixel);
+            gamePixel.UnselectPixel();
+        }
+
+    }
 }
