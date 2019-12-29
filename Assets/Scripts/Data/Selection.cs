@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 public class Selection {
+    public static event Action OnTooShortChain;
     public List<GamePixel> SelectedPixels { get; } = new List<GamePixel>();
 
     public Selection(GamePixel gamePixel) {
@@ -74,6 +76,7 @@ public class Selection {
             CollectPixels();
         } else {
             ShakePixels();
+            OnTooShortChain?.Invoke();
         }
 
     }
