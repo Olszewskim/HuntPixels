@@ -70,8 +70,23 @@ public class Selection {
     }
 
     public void TryCollectSelection() {
+        if (SelectedPixels.Count >= Constants.MIN_CHAIN_COUNT) {
+            CollectPixels();
+        } else {
+            ShakePixels();
+        }
+
+    }
+
+    private void CollectPixels() {
         for (int i = 0; i < SelectedPixels.Count; i++) {
-            SelectedPixels[i].UnselectPixel();
+            SelectedPixels[i].CollectPixel();
+        }
+    }
+
+    private void ShakePixels() {
+        for (int i = 0; i < SelectedPixels.Count; i++) {
+            SelectedPixels[i].ShakePixel();
         }
     }
 }

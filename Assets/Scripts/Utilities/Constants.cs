@@ -7,5 +7,11 @@ public static class Constants {
 
     #endregion
 
+    #region General
+
+    public const int MIN_CHAIN_COUNT = 3;
+
+    #endregion
+
     public static readonly Vector3 VectorForward = Vector3.forward;
 }

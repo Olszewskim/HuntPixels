@@ -1,4 +1,5 @@
 ﻿using System;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -10,6 +11,7 @@ public class GamePixel : Pixel, IPointerEnterHandler, IPointerDownHandler {
 
     private bool _isSelected;
     private Grid _grid;
+    private const float SHAKE_ANIM_TIME  = 0.5f;
 
     protected override void Awake() {
         base.Awake();
@@ -59,5 +61,14 @@ public class GamePixel : Pixel, IPointerEnterHandler, IPointerDownHandler {
         } else {
             OnGamePixelCanBeUnselected?.Invoke(this);
         }
+    }
+
+    public void CollectPixel() {
+        UnselectPixel();
+    }
+
+    public void ShakePixel() {
+        UnselectPixel();
+        transform.DOShakePosition(SHAKE_ANIM_TIME, 0.05f,10,0);
     }
 }
