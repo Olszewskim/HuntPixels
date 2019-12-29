@@ -362,7 +362,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1038653566
 GameObject:
@@ -1068,7 +1068,7 @@ PrefabInstance:
     - target: {fileID: 804533727754814254, guid: 40555f3b2f8c54ef19805930a8ac5a1a,
         type: 3}
       propertyPath: m_RootOrder
-      value: 11
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 804533727754814254, guid: 40555f3b2f8c54ef19805930a8ac5a1a,
         type: 3}
@@ -1143,7 +1143,7 @@ PrefabInstance:
     - target: {fileID: 3067797561771842963, guid: b207a6010554945aebc2695d1efe8022,
         type: 3}
       propertyPath: m_RootOrder
-      value: 12
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 3067797561771842963, guid: b207a6010554945aebc2695d1efe8022,
         type: 3}
@@ -1164,18 +1164,12 @@ PrefabInstance:
         type: 3}
       propertyPath: serializationData.Prefab
       value: 
-      objectReference: {fileID: 4175660991964727964, guid: b207a6010554945aebc2695d1efe8022,
-        type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 4175660991964727964, guid: b207a6010554945aebc2695d1efe8022,
         type: 3}
       propertyPath: _cameraController
       value: 
       objectReference: {fileID: 751862674}
-    - target: {fileID: 1195399875616836036, guid: b207a6010554945aebc2695d1efe8022,
-        type: 3}
-      propertyPath: m_SortingLayer
-      value: 2
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b207a6010554945aebc2695d1efe8022, type: 3}
 --- !u!1001 &5357157173820517406
