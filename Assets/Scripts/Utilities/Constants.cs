@@ -9,6 +9,9 @@ public static class Constants {
 
     #region General
 
+    public const int SECONDS_IN_HOUR = 3600;
+    public const float ENABLED_GROUP_ALPHA = 1;
+    public const float DISABLED_GROUP_ALPHA = 0.65f;
     public const int MIN_CHAIN_COUNT = 3;
 
     #endregion
