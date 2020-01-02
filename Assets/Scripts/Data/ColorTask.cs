@@ -1,9 +1,10 @@
-﻿using Sirenix.OdinInspector;
+﻿using System;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 public class ColorTask {
 
-
+    public event Action OnTaskProgressWasMade;
     [ShowInInspector] [PropertyOrder(0)] public Color ColorToCollect { get; }
 
     [ShowInInspector] [PropertyOrder(2)] public int RequiredAmount { get; }
@@ -18,6 +19,13 @@ public class ColorTask {
     }
 
     public void CollectColor() {
-        _currentCollected++;
+        if (!IsCompleted) {
+            _currentCollected++;
+            OnTaskProgressWasMade?.Invoke();
+        }
+    }
+
+    public int GetAmountToCollect() {
+        return Mathf.Max(RequiredAmount - _currentCollected, 0);
     }
 }
