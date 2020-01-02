@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
 [RequireComponent(typeof(Grid))]
-public class LevelGrid : SerializedMonoBehaviour {
+public class LevelGrid : Singleton<LevelGrid> {
     [SerializeField] private ImagePixel imagePixelPrefab;
     [SerializeField] private CameraController _cameraController;
     [SerializeField] private GameViewGrid _gameViewGrid;
@@ -22,6 +21,7 @@ public class LevelGrid : SerializedMonoBehaviour {
     private void Awake() {
         _levelGrid = GetComponent<Grid>();
         GamePixel.OnGamePixelCollected += CollectGamePixel;
+        GameManager.OnLevelStarted += StartLevel;
     }
 
     public void StartLevel(LevelData levelData) {
@@ -35,7 +35,8 @@ public class LevelGrid : SerializedMonoBehaviour {
                 var yPos = y * (_levelGrid.cellSize.y + _levelGrid.cellGap.y);
                 var localPos = new Vector3(xPos, yPos, 0) + _levelGrid.cellSize / 2;
 
-                var pixel = Instantiate(imagePixelPrefab, transform);
+                var pixel = imagePixelPrefab.GetPooledInstance<ImagePixel>();
+                pixel.transform.SetParent(transform);
                 pixel.transform.localPosition = localPos;
                 pixel.transform.localScale = _levelGrid.cellSize;
                 pixel.SetColor(_currentLevel.ImageColorsData[x, y]);
@@ -70,7 +71,7 @@ public class LevelGrid : SerializedMonoBehaviour {
 
     private void ClearOldLevel() {
         for (var i = 0; i < _levelPixels.Count; i++) {
-            Destroy(_levelPixels[i].gameObject);
+            _levelPixels[i].ReturnToPool();
         }
 
         _levelPixels.Clear();
@@ -95,5 +96,6 @@ public class LevelGrid : SerializedMonoBehaviour {
 
     private void OnDestroy() {
         GamePixel.OnGamePixelCollected -= CollectGamePixel;
+        GameManager.OnLevelStarted -= StartLevel;
     }
 }

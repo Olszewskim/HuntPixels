@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [RequireComponent(typeof(SpriteRenderer))]
-public abstract class Pixel : MonoBehaviour {
+public abstract class Pixel : PooledObject {
     protected SpriteRenderer spriteRenderer;
     public Color myColor { get; protected set; }
 

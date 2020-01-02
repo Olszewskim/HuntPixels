@@ -1,9 +1,10 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 using UnityEngine;
 
 public class GameManager : Singleton<GameManager> {
+    public static event Action<LevelData> OnLevelStarted;
     [SerializeField] private TextAsset[] _levelsData;
-    [SerializeField] private LevelGrid _levelGrid;
 
     private int _currentLevelIndex;
     private int _tooShortChainsCount;
@@ -32,13 +33,9 @@ public class GameManager : Singleton<GameManager> {
     private void StartCurrentLevel() {
         var imageJSON = JsonConvert.DeserializeObject<PixelImageJSON>(_levelsData[_currentLevelIndex].text);
         var levelData = new LevelData(imageJSON);
-        _levelGrid.StartLevel(levelData);
-        SelectionManager.Instance.ResetSelection();
+        OnLevelStarted?.Invoke(levelData);
     }
 
-    public void SwitchImageColors() {
-        _levelGrid.SwitchImageColors();
-    }
 
     private void OnTooShortChain() {
         _tooShortChainsCount++;

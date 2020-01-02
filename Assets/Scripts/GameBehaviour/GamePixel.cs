@@ -67,7 +67,7 @@ public class GamePixel : Pixel, IPointerEnterHandler, IPointerDownHandler {
     public void CollectPixel() {
         OnGamePixelCollected?.Invoke(this);
         UnselectPixel();
-        Destroy(gameObject);
+        ReturnToPool();
     }
 
     public void ShakePixel() {

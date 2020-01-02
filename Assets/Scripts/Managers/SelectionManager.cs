@@ -7,6 +7,7 @@ public class SelectionManager : Singleton<SelectionManager> {
     private void Start() {
         GamePixel.OnGamePixelCanBeSelected += TryAddToSelection;
         GamePixel.OnGamePixelCanBeUnselected += TryRemoveFromSelection;
+        GameManager.OnLevelStarted += ResetSelection;
     }
 
     private Selection _currentSelection;
@@ -53,7 +54,11 @@ public class SelectionManager : Singleton<SelectionManager> {
         }
     }
 
-    public void ResetSelection() {
+    private void ResetSelection(LevelData levelData) {
+        ResetSelection();
+    }
+
+    private void ResetSelection() {
         _currentSelection?.TryCollectSelection();
         _currentSelection = null;
         _lineRenderer.positionCount = 0;
@@ -62,6 +67,7 @@ public class SelectionManager : Singleton<SelectionManager> {
     protected override void OnDestroy() {
         GamePixel.OnGamePixelCanBeSelected -= TryAddToSelection;
         GamePixel.OnGamePixelCanBeUnselected -= TryRemoveFromSelection;
+        GameManager.OnLevelStarted -= ResetSelection;
         base.OnDestroy();
     }
 }

@@ -16,6 +16,6 @@ public class TestUI : MonoBehaviour {
     }
 
     private void SwitchImageColors() {
-        GameManager.Instance.SwitchImageColors();
+        LevelGrid.Instance.SwitchImageColors();
     }
 }
