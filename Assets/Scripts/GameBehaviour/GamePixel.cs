@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 public class GamePixel : Pixel, IPointerEnterHandler, IPointerDownHandler {
     public static event Action<GamePixel> OnGamePixelCanBeSelected;
     public static event Action<GamePixel> OnGamePixelCanBeUnselected;
+    public static event Action<GamePixel> OnGamePixelCollected;
 
     [SerializeField] private GameObject _selection;
 
@@ -64,7 +65,9 @@ public class GamePixel : Pixel, IPointerEnterHandler, IPointerDownHandler {
     }
 
     public void CollectPixel() {
+        OnGamePixelCollected?.Invoke(this);
         UnselectPixel();
+        Destroy(gameObject);
     }
 
     public void ShakePixel() {

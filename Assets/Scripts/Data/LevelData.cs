@@ -8,6 +8,8 @@ public class LevelData {
     [ShowInInspector] public Color[,] ImageColorsData { get; }
     [TableList, ShowInInspector] public List<ColorTask> LevelColorsTasks { get; } = new List<ColorTask>();
 
+    private Dictionary<Color, ColorTask> _levelColorTasksDictionary = new Dictionary<Color, ColorTask>();
+
     public LevelData(PixelImageJSON levelImageData) {
         ImageDimensions = new Vector2Int(levelImageData.width, levelImageData.height);
         ImageColorsData = new Color[ImageDimensions.x, ImageDimensions.y];
@@ -31,7 +33,15 @@ public class LevelData {
         var colorsToCollect =
             ImageColorsData.Cast<Color>().GroupBy(c => c).ToDictionary(cd => cd.Key, cd => cd.Count());
         foreach (var task in colorsToCollect) {
-            LevelColorsTasks.Add(new ColorTask(task.Key, task.Value));
+            var colorTask = new ColorTask(task.Key, task.Value);
+            LevelColorsTasks.Add(colorTask);
+            _levelColorTasksDictionary.Add(colorTask.ColorToCollect, colorTask);
+        }
+    }
+
+    public void CollectPixel(GamePixel gamePixel) {
+        if (_levelColorTasksDictionary.ContainsKey(gamePixel.myColor)) {
+            _levelColorTasksDictionary[gamePixel.myColor].CollectColor();
         }
     }
 }

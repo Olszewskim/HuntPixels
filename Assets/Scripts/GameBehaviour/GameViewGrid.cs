@@ -14,7 +14,10 @@ public class GameViewGrid : MonoBehaviour {
 
     private void Awake() {
         GenerateGrid();
+        GamePixel.OnGamePixelCollected += OnGamePixelCollected;
     }
+
+
 
     private void GenerateGrid() {
         _grid = GetComponent<Grid>();
@@ -52,5 +55,9 @@ public class GameViewGrid : MonoBehaviour {
         for (int i = 0; i < _gamePixels.Count; i++) {
             _gamePixels[i].SetColor(levelColorsTasks.GetRandomElement().ColorToCollect, _grid);
         }
+    }
+
+    private void OnGamePixelCollected(GamePixel gamePixel) {
+        _gamePixels.Remove(gamePixel);
     }
 }

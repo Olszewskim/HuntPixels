@@ -2,10 +2,13 @@
 using UnityEngine;
 
 public class ImagePixel : Pixel {
+    public bool IsFulfilled { get; private set; }
+
     private bool _isGray;
     private static readonly float _showColorAnimTime = 0.5f;
 
     public override void SetColor(Color color) {
+        IsFulfilled = false;
         base.SetColor(color);
         GrayOut(0);
     }
@@ -27,8 +30,13 @@ public class ImagePixel : Pixel {
     public void SwitchColor() {
         if (_isGray) {
             ShowColor();
-        } else {
+        } else if(!IsFulfilled){
             GrayOut();
         }
+    }
+
+    public void FulfillImagePixel() {
+        IsFulfilled = true;
+        ShowColor();
     }
 }

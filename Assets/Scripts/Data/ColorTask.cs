@@ -2,6 +2,8 @@
 using UnityEngine;
 
 public class ColorTask {
+
+
     [ShowInInspector] [PropertyOrder(0)] public Color ColorToCollect { get; }
 
     [ShowInInspector] [PropertyOrder(2)] public int RequiredAmount { get; }
@@ -13,5 +15,9 @@ public class ColorTask {
     public ColorTask(Color colorToCollect, int requiredAmount) {
         ColorToCollect = colorToCollect;
         RequiredAmount = requiredAmount;
+    }
+
+    public void CollectColor() {
+        _currentCollected++;
     }
 }

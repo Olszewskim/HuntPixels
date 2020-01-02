@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -19,6 +21,7 @@ public class LevelGrid : SerializedMonoBehaviour {
 
     private void Awake() {
         _levelGrid = GetComponent<Grid>();
+        GamePixel.OnGamePixelCollected += CollectGamePixel;
     }
 
     public void StartLevel(LevelData levelData) {
@@ -78,5 +81,19 @@ public class LevelGrid : SerializedMonoBehaviour {
         for (int i = 0; i < _levelPixels.Count; i++) {
             _levelPixels[i].SwitchColor();
         }
+    }
+
+    private void CollectGamePixel(GamePixel gamePixel) {
+        _currentLevel?.CollectPixel(gamePixel);
+        var unfulfilledPixelsOfCollectedColor =
+            _levelPixels.Where(p => p.myColor == gamePixel.myColor && !p.IsFulfilled).ToArray();
+        if (unfulfilledPixelsOfCollectedColor.Length > 0) {
+            var randomPixel = unfulfilledPixelsOfCollectedColor.GetRandomElement();
+            randomPixel.FulfillImagePixel();
+        }
+    }
+
+    private void OnDestroy() {
+        GamePixel.OnGamePixelCollected -= CollectGamePixel;
     }
 }
