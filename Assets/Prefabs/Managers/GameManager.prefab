@@ -43,3 +43,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75bb67585e770475a9a0be393f11f3c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  _levelsData:
+  - {fileID: 4900000, guid: db8f27b2f8183441b88ad54839508e10, type: 3}
+  - {fileID: 4900000, guid: 50d8062d1d0a14948bc363b63df438bd, type: 3}
+  - {fileID: 4900000, guid: df0527aab50f347b6be5f1470cdd083d, type: 3}
