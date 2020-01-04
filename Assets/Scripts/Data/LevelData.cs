@@ -44,4 +44,8 @@ public class LevelData {
             _levelColorTasksDictionary[gamePixel.myColor].CollectColor();
         }
     }
+
+    public Color GetRandomColorToCollect() {
+        return LevelColorsTasks.GetRandomElement().ColorToCollect;
+    }
 }

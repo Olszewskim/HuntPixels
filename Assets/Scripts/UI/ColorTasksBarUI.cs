@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ColorTasksBarUI : MonoBehaviour {
@@ -8,17 +9,18 @@ public class ColorTasksBarUI : MonoBehaviour {
 
     private void Awake() {
         _colorTaskUIPrefab.Hide();
+        GameManager.OnLevelStarted += Init;
     }
 
-    public void Init(List<ColorTask> colorTasks) {
+    public void Init(LevelData currentLevel) {
         TurnOffElements();
-        for (int i = 0; i < colorTasks.Count; i++) {
+        for (int i = 0; i < currentLevel.LevelColorsTasks.Count; i++) {
             if (i >= _colorTaskUIs.Count) {
                 var colorTaskUI = Instantiate(_colorTaskUIPrefab, transform);
                 _colorTaskUIs.Add(colorTaskUI);
             }
 
-            _colorTaskUIs[i].Init(colorTasks[i]);
+            _colorTaskUIs[i].Init( currentLevel.LevelColorsTasks[i]);
         }
     }
 
@@ -26,5 +28,9 @@ public class ColorTasksBarUI : MonoBehaviour {
         for (int i = 0; i < _colorTaskUIs.Count; i++) {
             _colorTaskUIs[i].Hide();
         }
+    }
+
+    private void OnDestroy() {
+        GameManager.OnLevelStarted -= Init;
     }
 }

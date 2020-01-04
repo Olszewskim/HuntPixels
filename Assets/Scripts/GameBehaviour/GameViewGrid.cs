@@ -12,11 +12,12 @@ public class GameViewGrid : MonoBehaviour {
     private Grid _grid;
     private readonly List<GamePixel> _gamePixels = new List<GamePixel>();
     private float _percentageGridPosFromBottomEdge = 0.03f;
+    private LevelData _currentLevel;
 
     private void Awake() {
         GenerateGrid();
         GamePixel.OnGamePixelCollected += OnGamePixelCollected;
-        GameManager.OnLevelStarted += PopulateGridWithPixels;
+        GameManager.OnLevelStarted += OnLevelStarted;
         Selection.OnSelectionCollected += RefreshBoard;
     }
 
@@ -24,6 +25,12 @@ public class GameViewGrid : MonoBehaviour {
         _grid = GetComponent<Grid>();
         _cameraController.FitCameraSizeToGridWith(GetGridWidth());
         PlaceGridAtBottomOfScreen();
+    }
+
+    private void OnLevelStarted(LevelData currentLevel) {
+        _currentLevel = currentLevel;
+        PopulateGridWithPixels(_currentLevel);
+        InitColorOfPixels();
     }
 
     private void PopulateGridWithPixels(LevelData levelData) {
@@ -65,9 +72,9 @@ public class GameViewGrid : MonoBehaviour {
         return _gameViewWidth * _grid.cellSize.x + (_gameViewWidth - 1) * _grid.cellGap.x;
     }
 
-    public void InitLevel(List<ColorTask> levelColorsTasks) {
+    public void InitColorOfPixels() {
         for (int i = 0; i < _gamePixels.Count; i++) {
-            _gamePixels[i].SetColor(levelColorsTasks.GetRandomElement().ColorToCollect, _grid);
+            _gamePixels[i].SetColor(_currentLevel.GetRandomColorToCollect(), _grid);
         }
     }
 
@@ -115,6 +122,7 @@ public class GameViewGrid : MonoBehaviour {
                 var checkedPos = new Vector3Int(x, y, 0);
                 if (!IsAnyPixelAtPosition(checkedPos)) {
                     var pixel = SpawnNewGamePixel(x, _gameViewHeight + checkedPos.y);
+                    pixel.SetColor(_currentLevel.GetRandomColorToCollect(), _grid);
                     pixel.SetNewCoords(checkedPos);
                 }
             }
@@ -123,7 +131,7 @@ public class GameViewGrid : MonoBehaviour {
 
     private void OnDestroy() {
         GamePixel.OnGamePixelCollected -= OnGamePixelCollected;
-        GameManager.OnLevelStarted -= PopulateGridWithPixels;
+        GameManager.OnLevelStarted -= OnLevelStarted;
         Selection.OnSelectionCollected -= RefreshBoard;
     }
 }

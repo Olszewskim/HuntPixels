@@ -7,8 +7,6 @@ using UnityEngine;
 public class LevelGrid : Singleton<LevelGrid> {
     [SerializeField] private ImagePixel imagePixelPrefab;
     [SerializeField] private CameraController _cameraController;
-    [SerializeField] private GameViewGrid _gameViewGrid;
-    [SerializeField] private ColorTasksBarUI _colorTasksBarUI;
 
     private Grid _levelGrid;
     [ShowInInspector] [ReadOnly] private LevelData _currentLevel;
@@ -41,8 +39,6 @@ public class LevelGrid : Singleton<LevelGrid> {
         }
 
         PlaceGridAtTopOfScreen(_currentLevel.ImageDimensions.x, _currentLevel.ImageDimensions.y);
-        _gameViewGrid.InitLevel(_currentLevel.LevelColorsTasks);
-        _colorTasksBarUI.Init(_currentLevel.LevelColorsTasks);
     }
 
     private void PlaceGridAtTopOfScreen(int dataWidth, int dataHeight) {
