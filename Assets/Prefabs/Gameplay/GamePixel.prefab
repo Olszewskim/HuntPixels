@@ -190,6 +190,11 @@ PrefabInstance:
       propertyPath: m_SortingLayer
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7140797294951638324, guid: 2c84795f8edc54c10844729f6ddb0658,
+        type: 3}
+      propertyPath: m_MaskInteraction
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 2005537526303916219, guid: 2c84795f8edc54c10844729f6ddb0658, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 2c84795f8edc54c10844729f6ddb0658, type: 3}

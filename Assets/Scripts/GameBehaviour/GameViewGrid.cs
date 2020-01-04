@@ -8,6 +8,7 @@ public class GameViewGrid : MonoBehaviour {
     [SerializeField] private int _gameViewHeight;
     [SerializeField] private GamePixel _gamePixelPrefab;
     [SerializeField] private CameraController _cameraController;
+    [SerializeField] private Transform _gridMask;
 
     private Grid _grid;
     private readonly List<GamePixel> _gamePixels = new List<GamePixel>();
@@ -23,8 +24,12 @@ public class GameViewGrid : MonoBehaviour {
 
     private void GenerateGrid() {
         _grid = GetComponent<Grid>();
-        _cameraController.FitCameraSizeToGridWith(GetGridWidth());
+        var gridSize = new Vector3(GetGridWidth(), GetGridHeight(), 1);
+        _cameraController.FitCameraSizeToGridWith(gridSize.x);
         PlaceGridAtBottomOfScreen();
+        var gridMaskSize = gridSize * 1.05f;
+        _gridMask.localScale = gridMaskSize;
+        _gridMask.localPosition = new Vector3(gridSize.x / 2, gridSize.y / 2);
     }
 
     private void OnLevelStarted(LevelData currentLevel) {
@@ -70,6 +75,10 @@ public class GameViewGrid : MonoBehaviour {
 
     private float GetGridWidth() {
         return _gameViewWidth * _grid.cellSize.x + (_gameViewWidth - 1) * _grid.cellGap.x;
+    }
+
+    private float GetGridHeight() {
+        return _gameViewHeight * _grid.cellSize.y + (_gameViewHeight - 1) * _grid.cellGap.y;
     }
 
     public void InitColorOfPixels() {
