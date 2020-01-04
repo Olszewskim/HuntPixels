@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [RequireComponent(typeof(Grid))]
@@ -16,6 +17,7 @@ public class GameViewGrid : MonoBehaviour {
         GenerateGrid();
         GamePixel.OnGamePixelCollected += OnGamePixelCollected;
         GameManager.OnLevelStarted += PopulateGridWithPixels;
+        Selection.OnSelectionCollected += RefreshBoard;
     }
 
     private void GenerateGrid() {
@@ -28,13 +30,9 @@ public class GameViewGrid : MonoBehaviour {
         RemoveOldPixels();
         for (int y = 0; y < _gameViewHeight; y++) {
             for (int x = 0; x < _gameViewWidth; x++) {
-                var xPos = x * (_grid.cellSize.x + _grid.cellGap.x);
-                var yPos = y * (_grid.cellSize.y + _grid.cellGap.y);
-                var localPos = new Vector3(xPos, yPos, 0) + _grid.cellSize / 2;
-                localPos.z = 0;
                 var pixel = _gamePixelPrefab.GetPooledInstance<GamePixel>();
                 pixel.transform.SetParent(transform);
-                pixel.transform.localPosition = localPos;
+                pixel.transform.localPosition = _grid.GetGridLocalPosition(x, y);
                 _gamePixels.Add(pixel);
             }
         }
@@ -72,8 +70,46 @@ public class GameViewGrid : MonoBehaviour {
         _gamePixels.Remove(gamePixel);
     }
 
+    private void RefreshBoard(List<GamePixel> collectedPixels) {
+        var collectedPixelsSortedByYPos = collectedPixels.OrderBy(p => p.LastPixelCoords.y).ToList();
+        for (int i = 0; i < collectedPixelsSortedByYPos.Count; i++) {
+            CheckMovedPixel(collectedPixelsSortedByYPos[i].LastPixelCoords);
+        }
+    }
+
+    private void CheckMovedPixel(Vector3Int gamePixelPos) {
+        if (IsAnyPixelAtPosition(gamePixelPos)) {
+            return;
+        }
+
+        var gamePixelAboveMe = GetFirstGamePixelAbove(gamePixelPos);
+        if (gamePixelAboveMe != null) {
+            var gamePixelOldPos = gamePixelAboveMe.LastPixelCoords;
+            gamePixelAboveMe.SetNewCoords(gamePixelPos);
+            CheckMovedPixel(gamePixelOldPos);
+        } else {
+            SpawnNewGamePixel();
+        }
+    }
+
+    private GamePixel GetFirstGamePixelAbove(Vector3Int gamePixelPos) {
+        return _gamePixels
+            .Where(p => p.LastPixelCoords.x == gamePixelPos.x &&
+                        p.LastPixelCoords.y > gamePixelPos.y)
+            .OrderBy(p => p.LastPixelCoords.y)
+            .FirstOrDefault();
+    }
+
+    private bool IsAnyPixelAtPosition(Vector3Int pos) {
+        return _gamePixels.Any(p => p.LastPixelCoords == pos);
+    }
+
+    private void SpawnNewGamePixel() {
+    }
+
     private void OnDestroy() {
         GamePixel.OnGamePixelCollected -= OnGamePixelCollected;
         GameManager.OnLevelStarted -= PopulateGridWithPixels;
+        Selection.OnSelectionCollected -= RefreshBoard;
     }
 }

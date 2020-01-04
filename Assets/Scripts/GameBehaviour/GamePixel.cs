@@ -9,10 +9,12 @@ public class GamePixel : Pixel, IPointerEnterHandler, IPointerDownHandler {
     public static event Action<GamePixel> OnGamePixelCollected;
 
     [SerializeField] private GameObject _selection;
+    public Vector3Int LastPixelCoords { get; private set; }
 
     private bool _isSelected;
     private Grid _grid;
-    private const float SHAKE_ANIM_TIME  = 0.5f;
+    private const float SHAKE_ANIM_TIME = 0.5f;
+    private const float FALL_DOWN_ANIM_TIME = 0.5f;
 
     protected override void Awake() {
         base.Awake();
@@ -28,6 +30,12 @@ public class GamePixel : Pixel, IPointerEnterHandler, IPointerDownHandler {
         _isSelected = false;
         _grid = grid;
         RefreshSelection();
+        LastPixelCoords = GetPixelCoords();
+    }
+
+    public void SetNewCoords(Vector3Int newPos) {
+        LastPixelCoords = newPos;
+        transform.DOLocalMove(_grid.GetGridLocalPosition(newPos.x, newPos.y), FALL_DOWN_ANIM_TIME);
     }
 
     public void SelectPixel() {
@@ -44,7 +52,7 @@ public class GamePixel : Pixel, IPointerEnterHandler, IPointerDownHandler {
         }
     }
 
-    public Vector3Int GetPixelCoords() {
+    private Vector3Int GetPixelCoords() {
         return _grid.WorldToCell(transform.position);
     }
 
@@ -72,6 +80,8 @@ public class GamePixel : Pixel, IPointerEnterHandler, IPointerDownHandler {
 
     public void ShakePixel() {
         UnselectPixel();
-        transform.DOShakePosition(SHAKE_ANIM_TIME, 0.05f,10,0);
+        transform.DOShakePosition(SHAKE_ANIM_TIME, 0.05f, 10, 0);
     }
+
+
 }

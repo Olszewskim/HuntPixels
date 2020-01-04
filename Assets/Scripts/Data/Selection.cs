@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Selection {
     public static event Action OnTooShortChain;
+    public static event Action<List<GamePixel>> OnSelectionCollected;
     public List<GamePixel> SelectedPixels { get; } = new List<GamePixel>();
 
     public Selection(GamePixel gamePixel) {
@@ -23,7 +24,7 @@ public class Selection {
             return false;
         }
 
-        if (ArePixelsNeighbours(lastPixel.GetPixelCoords(), gamePixel.GetPixelCoords())) {
+        if (ArePixelsNeighbours(lastPixel.LastPixelCoords, gamePixel.LastPixelCoords)) {
             SelectPixel(gamePixel);
             return true;
         }
@@ -74,6 +75,7 @@ public class Selection {
     public void TryCollectSelection() {
         if (SelectedPixels.Count >= Constants.MIN_CHAIN_COUNT) {
             CollectPixels();
+            OnSelectionCollected?.Invoke(SelectedPixels);
         } else {
             ShakePixels();
             OnTooShortChain?.Invoke();

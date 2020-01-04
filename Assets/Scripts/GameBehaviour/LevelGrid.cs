@@ -31,13 +31,9 @@ public class LevelGrid : Singleton<LevelGrid> {
 
         for (int y = 0; y < _currentLevel.ImageDimensions.y; y++) {
             for (int x = 0; x < _currentLevel.ImageDimensions.x; x++) {
-                var xPos = x * (_levelGrid.cellSize.x + _levelGrid.cellGap.x);
-                var yPos = y * (_levelGrid.cellSize.y + _levelGrid.cellGap.y);
-                var localPos = new Vector3(xPos, yPos, 0) + _levelGrid.cellSize / 2;
-
                 var pixel = imagePixelPrefab.GetPooledInstance<ImagePixel>();
                 pixel.transform.SetParent(transform);
-                pixel.transform.localPosition = localPos;
+                pixel.transform.localPosition = _levelGrid.GetGridLocalPosition(x,y);
                 pixel.transform.localScale = _levelGrid.cellSize;
                 pixel.SetColor(_currentLevel.ImageColorsData[x, y]);
                 _levelPixels.Add(pixel);
