@@ -5,7 +5,7 @@ public class ImagePixel : Pixel {
     public bool IsFulfilled { get; private set; }
 
     private bool _isGray;
-    private static readonly float _showColorAnimTime = 0.5f;
+    private const float SHOW_COLOR_ANIM_TIME = 0.5f;
 
     public override void SetColor(Color color) {
         IsFulfilled = false;
@@ -14,7 +14,7 @@ public class ImagePixel : Pixel {
     }
 
     private void GrayOut() {
-        GrayOut(_showColorAnimTime);
+        GrayOut(SHOW_COLOR_ANIM_TIME);
     }
 
     private void GrayOut(float time) {
@@ -23,7 +23,7 @@ public class ImagePixel : Pixel {
     }
 
     private void ShowColor() {
-        spriteRenderer.DOColor(myColor, _showColorAnimTime);
+        spriteRenderer.DOColor(myColor, SHOW_COLOR_ANIM_TIME);
         _isGray = false;
     }
 

@@ -30,12 +30,17 @@ public class GameViewGrid : MonoBehaviour {
         RemoveOldPixels();
         for (int y = 0; y < _gameViewHeight; y++) {
             for (int x = 0; x < _gameViewWidth; x++) {
-                var pixel = _gamePixelPrefab.GetPooledInstance<GamePixel>();
-                pixel.transform.SetParent(transform);
-                pixel.transform.localPosition = _grid.GetGridLocalPosition(x, y);
-                _gamePixels.Add(pixel);
+                SpawnNewGamePixel(x, y);
             }
         }
+    }
+
+    private GamePixel SpawnNewGamePixel(int x, int y) {
+        var pixel = _gamePixelPrefab.GetPooledInstance<GamePixel>();
+        pixel.transform.SetParent(transform);
+        pixel.transform.localPosition = _grid.GetGridLocalPosition(x, y);
+        _gamePixels.Add(pixel);
+        return pixel;
     }
 
     private void RemoveOldPixels() {
@@ -75,6 +80,8 @@ public class GameViewGrid : MonoBehaviour {
         for (int i = 0; i < collectedPixelsSortedByYPos.Count; i++) {
             CheckMovedPixel(collectedPixelsSortedByYPos[i].LastPixelCoords);
         }
+
+        GenerateNewPixels();
     }
 
     private void CheckMovedPixel(Vector3Int gamePixelPos) {
@@ -87,8 +94,6 @@ public class GameViewGrid : MonoBehaviour {
             var gamePixelOldPos = gamePixelAboveMe.LastPixelCoords;
             gamePixelAboveMe.SetNewCoords(gamePixelPos);
             CheckMovedPixel(gamePixelOldPos);
-        } else {
-            SpawnNewGamePixel();
         }
     }
 
@@ -104,7 +109,16 @@ public class GameViewGrid : MonoBehaviour {
         return _gamePixels.Any(p => p.LastPixelCoords == pos);
     }
 
-    private void SpawnNewGamePixel() {
+    private void GenerateNewPixels() {
+        for (int y = 0; y < _gameViewHeight; y++) {
+            for (int x = 0; x < _gameViewWidth; x++) {
+                var checkedPos = new Vector3Int(x, y, 0);
+                if (!IsAnyPixelAtPosition(checkedPos)) {
+                    var pixel = SpawnNewGamePixel(x, _gameViewHeight + checkedPos.y);
+                    pixel.SetNewCoords(checkedPos);
+                }
+            }
+        }
     }
 
     private void OnDestroy() {
