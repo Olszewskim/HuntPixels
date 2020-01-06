@@ -15,6 +15,7 @@ public class GamePixel : Pixel, IPointerEnterHandler, IPointerDownHandler {
     private Grid _grid;
     private const float SHAKE_ANIM_TIME = 0.5f;
     private const float FALL_DOWN_ANIM_TIME = 0.5f;
+    private bool _isMovingDown;
 
     protected override void Awake() {
         base.Awake();
@@ -35,7 +36,10 @@ public class GamePixel : Pixel, IPointerEnterHandler, IPointerDownHandler {
 
     public void SetNewCoords(Vector3Int newPos) {
         LastPixelCoords = newPos;
-        transform.DOLocalMove(_grid.GetGridLocalPosition(newPos.x, newPos.y), FALL_DOWN_ANIM_TIME);
+        transform.DOKill();
+        _isMovingDown = true;
+        transform.DOLocalMove(_grid.GetGridLocalPosition(newPos.x, newPos.y), FALL_DOWN_ANIM_TIME)
+            .OnComplete(() => _isMovingDown = false);
     }
 
     public void SelectPixel() {
@@ -80,8 +84,8 @@ public class GamePixel : Pixel, IPointerEnterHandler, IPointerDownHandler {
 
     public void ShakePixel() {
         UnselectPixel();
-        transform.DOShakePosition(SHAKE_ANIM_TIME, 0.05f, 10, 0);
+        if (!_isMovingDown) {
+            transform.DOShakePosition(SHAKE_ANIM_TIME, 0.05f, 10, 0);
+        }
     }
-
-
 }
